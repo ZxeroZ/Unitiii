@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Los [Header] organizan las variables en el Inspector para que sea más fácil de usar.
+
+    // Velocidad de movimiento, fuwerza de salto, sensibilidad del mouse, velocidad de caída, etc.
     [Header("Configuración de Movimiento")]
     public float moveSpeed = 6f;
 
     [Header("Configuración de Salto")]
     public float jumpForce = 7f;
-    public float fallMultiplier = 2.5f; // Hace que la caída sea más rápida y menos "flotante".
-    public float trampolineForce = 20f; // Fuerza de impulso de las gomas/trampolines.
+    public float fallMultiplier = 2.5f; 
+    public float trampolineForce = 20f; 
+
+    // Configuración de la camara 
 
     [Header("Configuración de Cámara")]
     public Camera firstPersonCamera;
@@ -37,10 +40,10 @@ public class PlayerController : MonoBehaviour
         respawnPoint = transform.position; // El punto de inicio es el primer checkpoint.
     }
 
-    // Se ejecuta en CADA FRAME. Aquí va toda la lógica principal.
     void Update()
     {
-        // --- DETECCIÓN DE SUELO ---
+        // detección de suelo con una esfera invisible.
+
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
 
         // --- MOVIMIENTO CON WASD ---
