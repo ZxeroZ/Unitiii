@@ -81,28 +81,23 @@ public class PlayerController : MonoBehaviour
 
     // Se ejecuta cuando el jugador ENTRA en un colisionador marcado como "Trigger".
     private void OnTriggerEnter(Collider other)
+{
+    if (other.CompareTag("DeathZone"))
     {
-        // Si tocamos la zona de muerte
-        if (other.gameObject.name == "DeathZone")
-        {
-            transform.position = respawnPoint; // Reaparecemos en el último checkpoint.
-            Debug.Log("Has caído. Reapareciendo en el último checkpoint.");
-        }
-        // Si tocamos un checkpoint
-        else if (other.CompareTag("Checkpoint"))
-        {
-            respawnPoint = other.transform.position + new Vector3(0, 2f, 0); // Actualizamos el punto de reaparición.
-            Debug.Log("¡Checkpoint alcanzado!");
-            other.gameObject.SetActive(false); // Desactivamos el checkpoint para no volver a tocarlo.
-        }
-        // Si tocamos la meta
-        else if (other.CompareTag("Finish"))
-        {
-            Debug.Log("¡FELICIDADES, HAS COMPLETADO EL CIRCUITO!");
-            // Aquí podrías añadir lógica para pasar al siguiente nivel o mostrar un menú.
-        }
+        GameManager.Instance.RespawnPlayer(gameObject);
     }
-    
+    else if (other.CompareTag("Checkpoint"))
+    {
+        Vector3 checkpointPos = other.transform.position + new Vector3(0, 2f, 0);
+        GameManager.Instance.UpdateCheckpoint(checkpointPos);
+        UIManager.Instance.ShowMessage("Checkpoint alcanzado");
+        other.gameObject.SetActive(false);
+    }
+    else if (other.CompareTag("Finish"))
+    {
+        GameManager.Instance.WinGame();
+    }
+}
     // Se ejecuta cuando el jugador CHOCA FÍSICAMENTE con otro colisionador.
     private void OnCollisionEnter(Collision collision)
     {
